@@ -15,7 +15,7 @@ Esse é um microserviço baseado em FastAPI que integra modelos de IA (OpenAI, G
 ## Arquitetura & Estrutura de Pastas
 
 ```
-petlove-sales-assistant/
+petlove-case-backend/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py              # Ponto de entrada da aplicação
