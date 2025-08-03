@@ -1,5 +1,3 @@
-# app/services/ai_client.py
-
 from typing import Protocol
 
 class AIClient(Protocol):
