@@ -1,12 +1,18 @@
-from pydantic import BaseSettings
-
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    openai_api_key: str
-    gemini_api_key: str
-    ai_provider: str = "openai"  # ou "gemini"
+    """
+    Configurações carregadas de .env
+    """
+    openai_api_key: str = Field(..., env="OPENAI_API_KEY")
+    gemini_api_key: str = Field(..., env="GEMINI_API_KEY")
+    ai_provider: str = Field("openai", env="AI_PROVIDER")
 
-    class Config:
-        env_file = ".env"
+    
+    model_config = SettingsConfigDict(
+        env_file=".env", # indica ao BaseSettings onde está o .env
+        env_file_encoding="utf-8",
+    )
 
 settings = Settings()

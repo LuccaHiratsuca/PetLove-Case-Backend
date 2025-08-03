@@ -1,16 +1,26 @@
-import httpx
+import anyio
+from google import genai
 from app.config import settings
 from app.services.ai_client import AIClient
 
 class GeminiClient(AIClient):
+    """
+    Cliente para interação com a API Gemini.
+    """
+
     def __init__(self):
-        self.base_url = "https://gemini.api.google.com/v1"
-        self.api_key = settings.gemini_api_key
+        self.client = genai.Client(api_key=settings.gemini_api_key)
 
     async def ask(self, prompt: str) -> str:
-        payload = {"prompt": prompt}
-        headers = {"Authorization": f"Bearer {self.api_key}"}
-        async with httpx.AsyncClient() as client:
-            r = await client.post(f"{self.base_url}/chat", json=payload, headers=headers, timeout=30)
-            r.raise_for_status()
-            return r.json()["response"]
+        """
+        Envia um prompt ao modelo Gemini e retorna o texto gerado.
+
+        Como generate_content é síncrono, executamos em thread separada para não bloquear o event loop do FastAPI.
+        """
+        response = await anyio.to_thread.run_sync(
+            lambda: self.client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt
+            )
+        )
+        return response.text

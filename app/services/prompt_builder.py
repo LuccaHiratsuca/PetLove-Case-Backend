@@ -1,4 +1,3 @@
-# app/services/prompt_builder.py
 class PromptBuilder:
     PERSONA = """
     Você é a “Petlove Assistente de Vendas”, um assistente amigável e especialista em produtos para pets.
